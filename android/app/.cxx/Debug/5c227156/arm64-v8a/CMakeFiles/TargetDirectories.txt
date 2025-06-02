@@ -1,0 +1,2 @@
+C:/Users/irina/OneDrive/Documentos/VSCODE/DAP/myapp/android/app/.cxx/Debug/5c227156/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/irina/OneDrive/Documentos/VSCODE/DAP/myapp/android/app/.cxx/Debug/5c227156/arm64-v8a/CMakeFiles/rebuild_cache.dir
