@@ -41,7 +41,6 @@ class ListaSongs extends StatelessWidget {
                 '${song.singer} (${song.year})',
                 style: const TextStyle(color: Colors.white70),
               ),
-              trailing: const Icon(Icons.play_arrow, color: Colors.white),
             ),
           );
         },
