@@ -60,7 +60,7 @@ class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(content: Text('Inicio de sesión exitoso.')),
   );
-  GoRouter.of(context).go('/lista_songs');
+  GoRouter.of(context).go('/lista');
 
 }
 
