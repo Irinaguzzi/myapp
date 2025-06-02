@@ -59,9 +59,9 @@ final List<Song> songs = [
   ),
   Song(
     id: '9',
-    title: 'El Pollito Pío',
-    singer: 'Los Meñiques de la Casa',
-    year: 2012,
+    title: 'XO (Only If You Say Yes)',
+    singer: 'Enhypen',
+    year: 2024,
     posterUrl: '',
   ),
   Song(
@@ -69,14 +69,14 @@ final List<Song> songs = [
     title: 'Back To Me',
     singer: 'The Rose',
     year: 2023,
-    posterUrl: '',
+    posterUrl: 'https://static.wikia.nocookie.net/kpop/images/2/2f/The_Rose_Back_To_Me_-_Alive_album_cover.png/revision/latest?cb=20230708174055.jpg',
   ),
   Song(
     id: '11',
     title: 'Treat You Better',
     singer: 'Shawn Mendes',
     year: 2016,
-    posterUrl: '',
+    posterUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Treat_You_Better_%28Official_Single_Cover%29_by_Shawn_Mendes.png/250px-Treat_You_Better_%28Official_Single_Cover%29_by_Shawn_Mendes.jpg',
   ),
   Song(
     id: '12',
