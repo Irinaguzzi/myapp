@@ -3,7 +3,7 @@ import "package:myapp/domain/class.dart";
 final List<Song> songs = [
   Song(
     id: '1',
-    title: 'Something Stupid',
+    title: 'Somethin\' Stupid',
     singer: 'Frank Sinatra & Nancy Sinatra',
     year: 1967,
     posterUrl: 'https://upload.wikimedia.org/wikipedia/en/9/9e/Something_Stupid_single_cover.jpg',
