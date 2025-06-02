@@ -16,9 +16,8 @@ class ListaSongs extends StatelessWidget {
         children: [
           // Fondo de imagen
           Positioned.fill(
-            child: Image.network(
-              'https://img.freepik.com/foto-gratis/fondo-abstracto-textura_1258-30697.jpg?ga=GA1.1.990963965.1748879985&semt=ais_items_boosted&w=740',
-              fit: BoxFit.cover,
+            child: Container(
+              color: Colors.black,
             ),
           ),
 
