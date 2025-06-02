@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/datasource/songs.dart'; // Importás la lista de canciones
+import 'package:myapp/datasource/songs.dart';
 
 class ListaSongs extends StatelessWidget {
   const ListaSongs({super.key});
@@ -7,19 +7,42 @@ class ListaSongs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Lista de Canciones'),
+        title: const Text('My Playlist'),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       body: ListView.builder(
         itemCount: songs.length,
         itemBuilder: (context, index) {
           final song = songs[index];
-          return ListTile(
-            leading: song.posterUrl != null
-                ? Image.network(song.posterUrl!)
-                : const Icon(Icons.music_note),
-            title: Text(song.title),
-            subtitle: Text('${song.singer} (${song.year})'),
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            color: Colors.grey[900],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(10),
+              leading: song.posterUrl != null && song.posterUrl!.isNotEmpty
+                  ? Image.network(
+                      song.posterUrl!,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    )
+                  : const Icon(Icons.music_note, color: Colors.white, size: 40),
+              title: Text(
+                song.title,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                '${song.singer} (${song.year})',
+                style: const TextStyle(color: Colors.white70),
+              ),
+              trailing: const Icon(Icons.play_arrow, color: Colors.white),
+            ),
           );
         },
       ),
