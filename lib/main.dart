@@ -1,102 +1,150 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/router/router.dart';  // Ajusta la ruta si es necesario
-import 'package:go_router/go_router.dart';
+import 'package:myapp/core/router/router.dart'; // Importa las rutas definidas en tu app
+import 'package:go_router/go_router.dart'; // Para navegación entre pantallas
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp()); // Punto de entrada de la app
 }
 
+// Widget raíz de la aplicación
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: router, // Usa el sistema de rutas personalizado
       title: 'Mi app de canciones',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, // Oculta el cartel de debug
     );
   }
 }
 
-// widget con estado (stateful - se queda) para la página de inicio
+// Widget con estado para manejar campos de entrada y lógica de login
 class PaginaDeInicio extends StatefulWidget {
   @override
   EstadoPaginaDeInicio createState() => EstadoPaginaDeInicio();
 }
 
 class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
-  //para leer los valores de los campos de texto
+  // Controladores para leer el texto de los campos
   final controladorUsuario = TextEditingController();
   final controladorContra = TextEditingController();
 
-  // usuario y contracorrectos
+  // Usuario y contraseña válidos (predefinidos)
   final usuarioCorrecto = 'chichamilanesa';
   final contraCorrecta = '19.11';
 
-  // función que se ejecuta al presionar el botón "Ingresar"
+  // Función que se ejecuta al presionar "Ingresar"
   void iniciarSesion() {
-    final usuario =
-        controladorUsuario.text; // obtiene el texto del campo de usuario
-    final contra =
-        controladorContra.text; // obtiene el texto del campo de contraseña
+    final usuario = controladorUsuario.text;
+    final contra = controladorContra.text;
 
-    // verifica si algún campo está vacío
+    // Valida si algún campo está vacío
     if (usuario == '' || contra == '') {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Por favor, completá el usuario y/o la contraseña.'),
-        ),
+        const SnackBar(content: Text('Por favor, completá el usuario y/o la contraseña.')),
       );
-    }
-    // verifica si la contra y el usuario son incorrectas
+    } 
+    // Verifica si los datos no coinciden con los correctos
     else if (usuario != usuarioCorrecto || contra != contraCorrecta) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuario o contraseña incorrectos.')),
+        const SnackBar(content: Text('Usuario o contraseña incorrectos.')),
       );
-    }
-    // si todo es correcto muestra el mensaje
+    } 
+    // Si todo está bien, muestra mensaje y navega a la lista de canciones
     else {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Inicio de sesión exitoso.')),
-  );
-  GoRouter.of(context).go('/lista');
-
-}
-
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Inicio de sesión exitoso.')),
+      );
+      GoRouter.of(context).go('/lista'); // Va a la pantalla de canciones
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')), // barra superior con título
-      body: Padding(
-        padding: const EdgeInsets.all(20.0), // espacio interno
-        child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // centra los widgets verticalmente
-          children: [
-            TextField(
-              controller:
-                  controladorUsuario, // conecta el controlador del usuario
-              decoration: InputDecoration(
-                labelText: 'Usuario',
-              ), // nombre del campo
+      backgroundColor: Colors.black, // Fondo negro para toda la pantalla
+      body: Center(
+        child: Card( // Card principal que contiene todo el formulario
+          color: Colors.grey[900], // Fondo gris oscuro
+          elevation: 10, // Sombra para levantar visualmente la tarjeta
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16), // Bordes redondeados
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0), // Espacio interno de la card
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Ocupa sólo el espacio necesario
+              children: [
+                const Text(
+                  'Iniciar sesión', // Título de la card
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20), // Espacio entre título y campos
+
+                // Card del campo de usuario
+                Card(
+                  color: Colors.grey[800],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: TextField(
+                      controller: controladorUsuario, // Controlador del usuario
+                      style: const TextStyle(color: Colors.white), // Texto blanco
+                      decoration: const InputDecoration(
+                        labelText: 'Usuario',
+                        labelStyle: TextStyle(color: Colors.white70), // Texto gris
+                        border: InputBorder.none, // Sin borde estándar
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12), // Espacio entre los campos
+
+                // Card del campo de contraseña
+                Card(
+                  color: Colors.grey[800],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: TextField(
+                      controller: controladorContra, // Controlador de contraseña
+                      obscureText: true, // Oculta el texto para seguridad
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        labelText: 'Contraseña',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20), // Espacio antes del botón
+
+                // Botón de ingreso
+                ElevatedButton(
+                  onPressed: iniciarSesion, // Llama a la función de login
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent, // Color violeta
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: const Text('Ingresar'), // Texto del botón
+                ),
+              ],
             ),
-            TextField(
-              controller:
-                  controladorContra, //conecta el controlador de la contraseña
-              obscureText: true, // Oculta la contra
-              decoration: InputDecoration(
-                labelText: 'Contraseña',
-              ), // nombre del campo
-            ),
-            SizedBox(height: 20), // espacio entre los campos y el botón
-            ElevatedButton(
-              onPressed: iniciarSesion, // accion al presionar el botón
-              child: Text('Ingresar'), // texto del botón
-            ),
-          ],
+          ),
         ),
       ),
     );
