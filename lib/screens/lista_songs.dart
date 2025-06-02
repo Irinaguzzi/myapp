@@ -12,7 +12,7 @@ class ListaSongs extends StatelessWidget {
           // Fondo de imagen
           Positioned.fill(
             child: Image.network(
-              'https://st2.depositphotos.com/1020070/11481/v/950/depositphotos_114813100-stock-illustration-black-and-white-musical-notation.jpg',
+              'https://static9.depositphotos.com/1008191/1205/i/450/depositphotos_12055354-stock-illustration-purple-background.jpg',
               fit: BoxFit.cover,
             ),
           ),
