@@ -19,7 +19,7 @@ class ListaSongs extends StatelessWidget {
           // Capa oscura encima del fondo para mejorar el contraste con el contenido
           Positioned.fill(
             child: Container(
-              color: Colors.black.withOpacity(0.6), // Opacidad del 60%
+              color: const Color.fromARGB(153, 0, 0, 0), // Opacidad 153, representa el %60
             ),
           ),
           // Contenido principal de la pantalla
