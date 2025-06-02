@@ -69,7 +69,7 @@ final List<Song> songs = [
     title: 'Shape Of You',
     singer: 'Ed Sheeran',
     year: 2017,
-    posterUrl: 'https://upload.wikimedia.org/wikipedia/en/b/b4/Shape_Of_You_%28Official_Single_Cover%29_by_Ed_Sheeran.jpg',
+    posterUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Shape_Of_You_%28Official_Single_Cover%29_by_Ed_Sheeran.png/250px-Shape_Of_You_%28Official_Single_Cover%29_by_Ed_Sheeran.jpg',
   ),
   Song(
     id: '11',
