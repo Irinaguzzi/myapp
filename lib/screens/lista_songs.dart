@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/datasource/songs.dart'; // Importa la lista de canciones desde otro archivo
+import 'package:myapp/datasource/songs.dart'; // Importa la lista de canciones
 
 class ListaSongs extends StatelessWidget {
   const ListaSongs({super.key});
@@ -9,24 +9,25 @@ class ListaSongs extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo de imagen que cubre toda la pantalla
+          // Fondo de imagen
           Positioned.fill(
             child: Image.network(
               'https://st2.depositphotos.com/1020070/11481/v/950/depositphotos_114813100-stock-illustration-black-and-white-musical-notation.jpg',
-              fit: BoxFit.cover, // La imagen se ajusta para cubrir todo
+              fit: BoxFit.cover,
             ),
           ),
-          // Capa oscura encima del fondo para mejorar el contraste con el contenido
+
+          // Capa oscura para contraste
           Positioned.fill(
             child: Container(
-              color: const Color.fromARGB(153, 0, 0, 0), // Opacidad 153, representa el %60
+              color: const Color.fromARGB(153, 0, 0, 0), // 60% opacidad
             ),
           ),
-          // Contenido principal de la pantalla
-          SafeArea( // Asegura que el contenido no se meta debajo de la barra de estado
+
+          // Contenido principal
+          SafeArea(
             child: Column(
               children: [
-                // Título de la playlist
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Text(
@@ -38,33 +39,32 @@ class ListaSongs extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Lista de canciones
                 Expanded(
                   child: ListView.builder(
-                    itemCount: songs.length, // Número de canciones
+                    itemCount: songs.length,
                     itemBuilder: (context, index) {
-                      final song = songs[index]; // Accede a la canción actual
+                      final song = songs[index];
+
                       return Center(
                         child: Card(
-                          margin: const EdgeInsets.symmetric(vertical: 8), // Espacio entre tarjetas
-                          color: Colors.grey[900]?.withOpacity(0.8), // Color oscuro translúcido
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          color: Colors.grey[900]?.withOpacity(0.8),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12), // Bordes redondeados
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.85, // Ancho del 85% de la pantalla
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            height: 80, // Cards más compactas
                             child: ListTile(
-                              contentPadding: const EdgeInsets.all(10), // Espacio interno
-                              
-                              // Imagen de la canción o ícono si no hay
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                               leading: song.posterUrl != null && song.posterUrl!.isNotEmpty
                                   ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8), // Bordes redondeados para la imagen
+                                      borderRadius: BorderRadius.circular(8),
                                       child: Image.network(
                                         song.posterUrl!,
                                         width: 50,
                                         height: 50,
-                                        fit: BoxFit.cover, // Recorta la imagen para que encaje bien
+                                        fit: BoxFit.cover,
                                       ),
                                     )
                                   : const Icon(
@@ -72,8 +72,6 @@ class ListaSongs extends StatelessWidget {
                                       color: Colors.white,
                                       size: 40,
                                     ),
-                              
-                              // Título de la canción
                               title: Text(
                                 song.title,
                                 style: const TextStyle(
@@ -81,8 +79,6 @@ class ListaSongs extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              
-                              // Artista y año de la canción
                               subtitle: Text(
                                 '${song.singer} (${song.year})',
                                 style: const TextStyle(
