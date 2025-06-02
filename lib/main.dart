@@ -147,9 +147,10 @@ class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
                     child: const Text(
                       'INGRESAR',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
+                        color: Colors.white,
                       ),
                     ),
                   ),
