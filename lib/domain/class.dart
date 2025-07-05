@@ -4,6 +4,7 @@ class Song {
   final String singer;
   final int year;
   final String? posterUrl;
+  final String? lyric;
 
   Song({
     required this.id,
@@ -11,6 +12,7 @@ class Song {
     required this.singer,
     required this.year,
     this.posterUrl,
+    this.lyric,
   });
 
   Map<String, dynamic> toFirestore() {
@@ -20,6 +22,7 @@ class Song {
       'director': singer,
       'year': year,
       'posterUrl': posterUrl,
+      'lyrics': lyric,
     };
   }
 }

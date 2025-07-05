@@ -1,0 +1,101 @@
+/*
+Cuando queres que algo saea opcional, cuando lo declaras en la clase, le pones ? atrás y lo eliminas de la parte que dice
+required this.xx
+
+card(
+resto del codigo)
+
+Para tocar algo y que me lleve a otra pagina:
+
+ListTile{
+tiene una funcion que es 
+  onTap: {}{
+  context.push ('/movie-detail', extra: movieList)      pasa lo que quiero que haga cuando apreto el boton, por ejemplo, paso a otra pantalla.
+  }
+}
+ej queremos ir a una pantalla donde damos una cancion
+en screen de la nueva pagina:
+class MovieDetail extends StatlessWidget{
+
+Movie movie;
+  MovieDetail(super.key, required this.movie)
+}
+
+
+en router tengo que hacer otra ruta
+routes[
+  GoRoute(path: '/movies', builder: ( ,state o algo asi )) 
+]
+
+/////////////////////////////////////////////////////////////////////////////
+si quiero que algo cambie en mi pantallla, en vez de poner el StatlessWidget, usamos el StatefulWidget.
+El estado de estas ambos es cómo está, como si fuese una foto de las variables en un momento determinado
+el gestor de estados al ppio reemplaza al statefullwidget pero dsps trabajan juntos.
+lo usamos para que las variables vivan mas alla de las pantallas (si cambio de pantalla y vuelvo, el valor lo pierdo.
+al igual que si cierro la pantalla; no quiero perder los datos). Permite que las pantallas dependan de las variables
+y no la variable de la pantalla. La pantalla accede a la variable, no al revés.
+Para poder usar el gestor importo lo siguiente:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+Screens va dentro de Presentation. Tambien dentro de presentations va a estar providers.dart
+
+home_screen:
+
+class HomeScreen extends ConsumerWidget{
+  const MovieScreen({siér.key});
+
+  @override
+  Widget build(BuildContext.context, ref){ //como es consumerwidget, con la ref accede a cualquier referencia de riverpoint
+   final counter = ref.watch (counterProvider) //read es verlo 1 vez, watch es verlo constantemente. Para el contador sirev el watch
+   
+    return Saffold{
+   body: Center{
+   child: Text{
+    }
+   }
+
+   floatingActionButton: FloatingActionButton(
+   onPressed: (){
+   ref.read(counterProvider.notifier).state ++; //acá lo que hace es leer al notifier. Permite avisar que va a cambiar el estado. el state corresponde al int, que es basicamente el contador
+   
+   }
+   
+   )//floatingactionbutton
+   
+   
+   }
+  }
+
+
+}
+
+
+providers.dar:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+StateProvider <int> counterProvider = StateProvider<int>((ref)=> 0); // 0 es el valor con el que inicio. Ref es una referencia a todos los rpoviders de riverpoint que tengo en mi aplicacion, con
+ref voy a poder acceder a cualquiera. Ya con esto, puedo sacar el contador de la home screen. Esto se va a ver en la home screen. El contador va a valer 0. SI pongo 6, va a valer 6 y a partri de ahi
+aumetna
+
+
+///////////////////////////////
+TAREA:
+1. instalar riverpod
+2. crear un provider para la lista de canciones (para modificar el provider accedemos al notifier)
+3. observar (watch) el provider desde la pantalla ppal y la pantalla del nuevo elemento
+4. a traves del notifier
+ref.read(del provider.notifier).state o algo así entonces en la otra pantalla como esta el ref.watch, se actualiza automaticamente
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Pantalla inicial es el login.
+Pantalla principal dsps del legin tiene el listado de canciones y teiene el botoncito que si se apreta, va a una pantalla donde vamos a tener que cargar
+los elementos (campos) requeridos para agregar a la lista y el boton que dice agregar.
+
+----
+si apretas alguna de las cartas de la pantalla que te lleve a la misma pantalla que
+
+modo agregar 
+modo ver
+modo editar
+
+todos los modos llevan a la misma pantalla, pero en el modo editar habria 3 botones (editar, borrar y guardar); en el modo
+ver no habría nada mas que lo que ya hay y en borrar (borrar, cancelar).
+*/

@@ -1,61 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/router/router.dart'; // Importa configuración de rutas
-import 'package:go_router/go_router.dart'; // Librería para navegación
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myapp/core/router/router.dart'; // importa configuración de rutas
+import 'package:myapp/datasource/user.dart'; // importa la lista de usuarios
+import 'package:go_router/go_router.dart'; // librería para navegación
 
 void main() {
-  runApp(const MyApp()); // Ejecuta la aplicación
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
-// Widget principal sin estado
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router, // Usa la configuración de rutas definida
-      title: 'Mi app de canciones',
-      debugShowCheckedModeBanner: false, // Quita la etiqueta de "debug"
+      routerConfig: router,
+      title: 'mi app de canciones',
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-// Página de inicio con estado
 class PaginaDeInicio extends StatefulWidget {
+  const PaginaDeInicio({super.key});
+
   @override
   EstadoPaginaDeInicio createState() => EstadoPaginaDeInicio();
 }
 
 class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
-  // Controladores para leer el texto ingresado en los campos
   final controladorUsuario = TextEditingController();
   final controladorContra = TextEditingController();
 
-  // Usuario y contraseña correctos
-  final usuarioCorrecto = 'chichamilanesa';
-  final contraCorrecta = '19.11';
-
-  // Función que se llama al presionar el botón "Ingresar"
   void iniciarSesion() {
     final usuario = controladorUsuario.text;
     final contra = controladorContra.text;
 
-    // Si algún campo está vacío, muestra mensaje de error
-    if (usuario == '' || contra == '') {
+    if (usuario.isEmpty || contra.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, completá el usuario y/o la contraseña.')),
+        const SnackBar(
+            content: Text('por favor, completá el usuario y/o la contraseña')),
       );
+      return;
     }
-    // Si usuario o contraseña no coinciden, muestra mensaje de error
-    else if (usuario != usuarioCorrecto || contra != contraCorrecta) {
+
+    // opción B: usamos any() para verificar si existe un usuario válido
+    bool userExists = users.any(
+      (u) => u.username == usuario && u.password == contra,
+    );
+    /*
+    Para cada usuario u en la lista, devuelve true si su nombre de usuario
+    es igual a usuario YYYY si su contra es igual a la contra.
+    Si algun usuario cumple con LAS DOS condciones, "any" se vuelve true
+    Si ninguno cumple, devuelve false y salta lo del mensaje de error
+    */
+    if (!userExists) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuario o contraseña incorrectos.')),
+        const SnackBar(content: Text('usuario o contraseña incorrectos')),
       );
-    }
-    // Si todo está bien, muestra mensaje de éxito y navega a la pantalla de lista
-    else {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Inicio de sesión exitoso.')),
+        const SnackBar(content: Text('inicio de sesión exitoso')),
       );
       GoRouter.of(context).go('/lista');
     }
@@ -64,94 +73,81 @@ class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Fondo negro para toda la pantalla
+      backgroundColor: Colors.black,
       body: Center(
         child: Card(
-          // Card principal que contiene todo el formulario
-          color: Colors.grey[900], // Color gris oscuro
-          elevation: 10, // Sombra para resaltar
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16), // Bordes redondeados
-          ),
+          color: Colors.grey[900],
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
-            padding: const EdgeInsets.all(24.0), // Espacio interno del card
+            padding: const EdgeInsets.all(24.0),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 320), // Máximo ancho
+              constraints: const BoxConstraints(maxWidth: 320),
               child: Column(
-                mainAxisSize: MainAxisSize.min, // Solo ocupa el espacio necesario
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Título
                   const Text(
-                    'Iniciar sesión',
+                    'iniciar sesión',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 20), // Espacio debajo del título
-
-                  // Card para el campo de usuario
+                  const SizedBox(height: 20),
                   Card(
                     color: Colors.grey[800],
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: TextField(
                         controller: controladorUsuario,
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                          labelText: 'Usuario',
-                          labelStyle: TextStyle(color: Colors.white70),
-                          border: InputBorder.none, // Sin borde visible
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12), // Espacio entre campos
-
-                  // Card para el campo de contraseña
-                  Card(
-                    color: Colors.grey[800],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: TextField(
-                        controller: controladorContra,
-                        obscureText: true, // Oculta el texto para la contraseña
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                          labelText: 'Contraseña',
+                          labelText: 'usuario',
                           labelStyle: TextStyle(color: Colors.white70),
                           border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20), // Espacio antes del botón
-
-                  // Botón "Ingresar" más visible
-                  ElevatedButton(
-                    onPressed: iniciarSesion, // Llama a la función al presionar
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurpleAccent, // Color llamativo
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  const SizedBox(height: 12),
+                  Card(
+                    color: Colors.grey[800],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: TextField(
+                        controller: controladorContra,
+                        obscureText: true,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
+                          labelText: 'contraseña',
+                          labelStyle: TextStyle(color: Colors.white70),
+                          border: InputBorder.none,
+                        ),
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: iniciarSesion,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurpleAccent,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     child: const Text(
                       'INGRESAR',
                       style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                        color: Colors.white,
-                      ),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                          color: Colors.white),
                     ),
                   ),
                 ],
