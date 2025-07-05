@@ -52,7 +52,7 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
         ),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.deepPurpleAccent), // 🟣 íconos violetas
+        iconTheme: const IconThemeData(color: Colors.deepPurpleAccent), // iconos violetas
         actions: [
           if (isView)
             IconButton(

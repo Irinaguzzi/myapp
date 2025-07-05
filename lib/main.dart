@@ -48,7 +48,7 @@ class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
       return;
     }
 
-    // opción B: usamos any() para verificar si existe un usuario válido
+    // any() verifica si existe al menos un usuario válido
     bool userExists = users.any(
       (u) => u.username == usuario && u.password == contra,
     );

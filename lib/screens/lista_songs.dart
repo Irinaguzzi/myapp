@@ -12,7 +12,7 @@ class ListaSongs extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final songsList = ref.watch(songsProvider);
 
-    // divido en dos columnas, como ya tenias, pero usando songsList actualizado
+    // divido en dos columnas
     final leftColumn = songsList.sublist(0, (songsList.length / 2).ceil());
     final rightColumn = songsList.sublist((songsList.length / 2).ceil(), songsList.length);
     final pairedSongs = List.generate(leftColumn.length, (index) {
@@ -69,7 +69,7 @@ class ListaSongs extends ConsumerWidget {
                                     child: ListTile(
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                                       onTap: () {
-                                        // al tocar la cancion navego a song detail en modo view
+                                        // al tocar la cancion voy a song detail en modo view
                                         GoRouter.of(context).push(
                                           '/song-detail',
                                           extra: SongDetailArgs(song: song, mode: SongDetailMode.view),
@@ -112,7 +112,7 @@ class ListaSongs extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // boton flotante para agregar nueva cancion
+          // boton para agregar nueva cancion
           GoRouter.of(context).push(
             '/song-detail',
             extra: SongDetailArgs(mode: SongDetailMode.add),
