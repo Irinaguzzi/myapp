@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/domain/class.dart';
 import 'package:myapp/presentation/providers.dart';
 import 'package:myapp/domain/song_detail_args.dart';
-
 enum SongDetailMode { view, add, edit }
 
 class SongDetailScreen extends ConsumerStatefulWidget {
