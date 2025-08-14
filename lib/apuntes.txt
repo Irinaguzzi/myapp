@@ -113,5 +113,9 @@ empleado siga estando. Por otro lado, con la no sql puedo eliminar todo y va a e
 Con las sql, las tablas de "informacion" estan estructuradas, todos tienen las mismas columnas (ej, nombre, direccion, contraseña) aunque no estén completadas. Los no sql son tipo
 árboles, los datos van variando, etc.
 
+sincrónico --> sé cuando algo va a pasar.
+asinc --> asincrónico (no sé cuando va a pasar, tengo que esperar)
+await --> el programa se frena y espera. Se pone a awaitear tareas asincrónicas, frenando todo el programa.
+
 
 
