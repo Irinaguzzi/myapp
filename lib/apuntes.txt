@@ -69,7 +69,6 @@ class HomeScreen extends ConsumerWidget{
 
 }
 
-
 providers.dar:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 StateProvider <int> counterProvider = StateProvider<int>((ref)=> 0); // 0 es el valor con el que inicio. Ref es una referencia a todos los rpoviders de riverpoint que tengo en mi aplicacion, con
@@ -99,3 +98,20 @@ modo editar
 todos los modos llevan a la misma pantalla, pero en el modo editar habria 3 botones (editar, borrar y guardar); en el modo
 ver no habría nada mas que lo que ya hay y en borrar (borrar, cancelar).
 */
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+se puede tener datos locales (en una app) y en la nube
+para que varios usuarios puedan compartir datos entre ellos, se necesita la nube (x ejemplo, ig, que uno sube fotos para compartir, no para verlo
+él solo)
+la nube es un servidor; el servidor es cualquier computadora. Para conectarnos desde el front-end a la bd de la nube, no puedo conectarme directamente,
+necesito de un back-end que me va a servir como intermediario. La fuente de datos de una app, es el backend, ahora, la fuente de datos del backend es la cloud
+Buisness logic es lo que hace la aplicación, la funcionalidad.
+siempre necesito el backend, no siempre lo hago yo. (siempre que yo use la nube)
+vos haces tu backend cuando queres que tu buisness logic esté en el backend.
+sql y no sql. Ambas tienen relaciones, pero la relacion del tipo de sql es muchismo mas fuerte que las no sql. Con sql, ej: no se puede eliminar la empresa mientras que este 
+empleado siga estando. Por otro lado, con la no sql puedo eliminar todo y va a estar igual todo el tiempo.
+Con las sql, las tablas de "informacion" estan estructuradas, todos tienen las mismas columnas (ej, nombre, direccion, contraseña) aunque no estén completadas. Los no sql son tipo
+árboles, los datos van variando, etc.
+
+
+
