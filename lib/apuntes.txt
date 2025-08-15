@@ -117,5 +117,19 @@ sincrónico --> sé cuando algo va a pasar.
 asinc --> asincrónico (no sé cuando va a pasar, tengo que esperar)
 await --> el programa se frena y espera. Se pone a awaitear tareas asincrónicas, frenando todo el programa.
 
+adbr repo (el que nos mostro el del campus): movieapp trabajo con firebas, pero future examples que trabaja solo con promesas sin firebase
 
+MOVIEAPP:
+trabajo con consumerwidget porque trabajo con riverpod
+el notifier se va a encargar de cumplir una funcion en vez de poner el estado. ejemplo: ref.read(movieProvider.notifier).getAllMovies();
+todo lo nuevo esta en el provider.
 
+Antes usabamos el stateprovider. Ahora unamos un StateNotifiereProvider. Acá podemos definir el notifier.
+final movieProvider = StateNotifierProvider<MovieNotifier, List<Movie>>
+Dentro de las funciones que podemos poner, ponemos cambiar el estado. Las funciones no deberian estar en las pantallas ya que se deben dividir las responsabilidades
+final movies = await docs.get(); //es una funcion que espera a que termona de traer todas las peliculas para ponerla como las final movies.
+
+una promesa ejecuta una funcion que no sabes cuanto tarda, el codigo no sigue si la pormesa no se cumple:
+future<void> addMovie(Movie movie) async{
+ /////
+}
