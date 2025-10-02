@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "210023770431",
+    "project_id": "dap-deiru",
+    "storage_bucket": "dap-deiru.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210023770431:android:fb4cd0615148b6cf868b8a",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQZntqCgP7kvEof7zukych2Wvw3lSdQ2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

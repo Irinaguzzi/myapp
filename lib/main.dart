@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/core/router/router.dart'; // importa configuración de rutas
-import 'package:myapp/datasource/user.dart'; // importa la lista de usuarios
-import 'package:go_router/go_router.dart'; // librería para navegación
+import 'package:myapp/core/router/router.dart'; // configuración de rutas
+import 'package:myapp/datasource/user.dart'; // lista de usuarios
+import 'package:go_router/go_router.dart'; // navegación
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  // Necesario antes de inicializar Firebase
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializa Firebase usando las opciones generadas por flutterfire configure
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -52,12 +62,7 @@ class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
     bool userExists = users.any(
       (u) => u.username == usuario && u.password == contra,
     );
-    /*
-    Para cada usuario u en la lista, devuelve true si su nombre de usuario
-    es igual a usuario YYYY si su contra es igual a la contra.
-    Si algun usuario cumple con LAS DOS condciones, "any" se vuelve true
-    Si ninguno cumple, devuelve false y salta lo del mensaje de error
-    */
+
     if (!userExists) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('usuario o contraseña incorrectos')),
@@ -78,8 +83,9 @@ class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
         child: Card(
           color: Colors.grey[900],
           elevation: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: ConstrainedBox(
