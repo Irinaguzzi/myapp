@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/core/router/router.dart'; // configuración de rutas
-import 'package:myapp/datasource/user.dart'; // lista de usuarios
+import 'package:myapp/core/router/router.dart'; // lista de usuarios
 import 'package:go_router/go_router.dart'; // navegación
 import 'package:firebase_core/firebase_core.dart';
+import 'package:myapp/presentation/providers.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -35,45 +35,55 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class PaginaDeInicio extends StatefulWidget {
+class PaginaDeInicio extends ConsumerStatefulWidget {
   const PaginaDeInicio({super.key});
 
   @override
   EstadoPaginaDeInicio createState() => EstadoPaginaDeInicio();
 }
 
-class EstadoPaginaDeInicio extends State<PaginaDeInicio> {
+class EstadoPaginaDeInicio extends ConsumerState<PaginaDeInicio> {
   final controladorUsuario = TextEditingController();
   final controladorContra = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    // ✅ cuando arranca la app, traigo todos los usuarios de Firebase
+    Future.microtask(() {
+      ref.read(usersProvider.notifier).getAllUsers();
+    });
+  }
   void iniciarSesion() {
-    final usuario = controladorUsuario.text;
-    final contra = controladorContra.text;
+  final usuario = controladorUsuario.text;
+  final contra = controladorContra.text;
 
-    if (usuario.isEmpty || contra.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('por favor, completá el usuario y/o la contraseña')),
-      );
-      return;
-    }
-
-    // any() verifica si existe al menos un usuario válido
-    bool userExists = users.any(
-      (u) => u.username == usuario && u.password == contra,
+  if (usuario.isEmpty || contra.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('por favor, completá el usuario y/o la contraseña')),
     );
+    return;
+  }
+
+  // ahora lee la lista de usuarios desde Firebase
+  final usersList = ref.read(usersProvider);
+  bool userExists = usersList.any(
+    (u) => u.username == usuario && u.password == contra,
+  );
 
     if (!userExists) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('usuario o contraseña incorrectos')),
-      );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('usuario o contraseña incorrectos')),
+    );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('inicio de sesión exitoso')),
-      );
-      GoRouter.of(context).go('/lista');
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('inicio de sesión exitoso')),
+    );
+    GoRouter.of(context).go('/lista');
+    } 
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myapp/datasource/user.dart';
 import 'package:myapp/domain/class.dart';
 
 // Provider que maneja toda la lógica de Firebase
@@ -58,6 +59,51 @@ class SongsNotifier extends StateNotifier<List<Song>> {
       state = state.where((s) => s.id != id).toList();
     } catch (e) {
       print("Error al borrar canción: $e");
+    }
+  }
+}
+
+final usersProvider =
+    StateNotifierProvider<UsersNotifier, List<User>>((ref) {
+  return UsersNotifier(FirebaseFirestore.instance);
+});
+
+class UsersNotifier extends StateNotifier<List<User>> {
+  final FirebaseFirestore db;
+  UsersNotifier(this.db) : super([]);
+
+  Future<void> addUser(User user) async {
+    final doc = db.collection('users').doc();
+    final newUser = User(
+      id: doc.id,
+      username: user.username,
+      password: user.password,
+    );
+    try {
+      await doc.set(newUser.toFirestore());
+      state = [...state, newUser];
+    } catch (e) {
+      print("Error al agregar usuario: $e");
+    }
+  }
+
+  Future<void> getAllUsers() async {
+    try {
+      final snapshot = await db.collection('users').get();
+      state = snapshot.docs
+          .map((doc) => User.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      print("Error al traer usuarios: $e");
+    }
+  }
+
+  Future<void> deleteUser(String id) async {
+    try {
+      await db.collection('users').doc(id).delete();
+      state = state.where((u) => u.id != id).toList();
+    } catch (e) {
+      print("Error al borrar usuario: $e");
     }
   }
 }
