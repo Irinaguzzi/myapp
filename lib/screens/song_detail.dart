@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:myapp/domain/class.dart';
 import 'package:myapp/presentation/providers.dart';
 import 'package:myapp/domain/song_detail_args.dart';
+
 enum SongDetailMode { view, add, edit }
 
 class SongDetailScreen extends ConsumerStatefulWidget {
@@ -28,8 +29,10 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
     super.initState();
     titleController = TextEditingController(text: widget.song?.title ?? '');
     singerController = TextEditingController(text: widget.song?.singer ?? '');
-    yearController = TextEditingController(text: widget.song?.year.toString() ?? '');
-    posterUrlController = TextEditingController(text: widget.song?.posterUrl ?? '');
+    yearController =
+        TextEditingController(text: widget.song?.year.toString() ?? '');
+    posterUrlController =
+        TextEditingController(text: widget.song?.posterUrl ?? '');
     lyricsController = TextEditingController(text: widget.song?.lyric ?? '');
   }
 
@@ -51,7 +54,8 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
         ),
         backgroundColor: Colors.grey[900],
         foregroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.deepPurpleAccent), // iconos violetas
+        iconTheme:
+            const IconThemeData(color: Colors.deepPurpleAccent), // iconos violetas
         actions: [
           if (isView)
             IconButton(
@@ -59,7 +63,8 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
               onPressed: () {
                 GoRouter.of(context).pushReplacement(
                   '/song-detail',
-                  extra: SongDetailArgs(song: widget.song, mode: SongDetailMode.edit),
+                  extra: SongDetailArgs(
+                      song: widget.song, mode: SongDetailMode.edit),
                 );
               },
             ),
@@ -67,9 +72,7 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                ref.read(songsProvider.notifier).update((state) {
-                  return state.where((s) => s.id != widget.song!.id).toList();
-                });
+                ref.read(songsProvider.notifier).deleteSong(widget.song!.id);
                 GoRouter.of(context).pop();
               },
             ),
@@ -86,40 +89,51 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
                 const SizedBox(height: 12),
                 cardCampo(singerController, 'Artista', enabled: !isView),
                 const SizedBox(height: 12),
-                cardCampo(yearController, 'Año', enabled: !isView, keyboardType: TextInputType.number),
+                cardCampo(yearController, 'Año',
+                    enabled: !isView, keyboardType: TextInputType.number),
                 const SizedBox(height: 12),
-                cardCampo(posterUrlController, 'URL del poster', enabled: !isView),
+                cardCampo(posterUrlController, 'URL del poster',
+                    enabled: !isView),
                 const SizedBox(height: 12),
-                cardCampo(lyricsController, 'Letra (Lyrics)', enabled: !isView, keyboardType: TextInputType.multiline),
+                cardCampo(lyricsController, 'Letra (Lyrics)',
+                    enabled: !isView,
+                    keyboardType: TextInputType.multiline),
                 const SizedBox(height: 24),
                 if (!isView)
                   ElevatedButton(
                     onPressed: () {
                       final newSong = Song(
-                        id: isEdit ? widget.song!.id : DateTime.now().millisecondsSinceEpoch.toString(),
+                        id: isEdit
+                            ? widget.song!.id
+                            : DateTime.now()
+                                .millisecondsSinceEpoch
+                                .toString(),
                         title: titleController.text,
                         singer: singerController.text,
                         year: int.tryParse(yearController.text) ?? 0,
                         posterUrl: posterUrlController.text,
-                        lyric: lyricsController.text.isNotEmpty ? lyricsController.text : null,
+                        lyric: lyricsController.text.isNotEmpty
+                            ? lyricsController.text
+                            : null,
                       );
 
                       if (isAdd) {
-                        ref.read(songsProvider.notifier).update((state) => [...state, newSong]);
+                        ref.read(songsProvider.notifier).addSong(newSong);
                       } else if (isEdit) {
-                        ref.read(songsProvider.notifier).update((state) {
-                          return state.map((s) => s.id == newSong.id ? newSong : s).toList();
-                        });
+                        ref.read(songsProvider.notifier).updateSong(newSong);
                       }
 
                       GoRouter.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurpleAccent,
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: Text(isAdd ? 'Agregar' : 'Guardar', style: const TextStyle(color: Colors.white)),
+                    child: Text(isAdd ? 'Agregar' : 'Guardar',
+                        style: const TextStyle(color: Colors.white)),
                   ),
               ],
             ),

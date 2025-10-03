@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  // Necesario antes de inicializar Firebase
+  // inicializo Firebase
   WidgetsFlutterBinding.ensureInitialized();
 
   // Inicializa Firebase usando las opciones generadas por flutterfire configure

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Song {
   final String id;
   final String title;
@@ -15,14 +17,25 @@ class Song {
     this.lyric,
   });
 
+  factory Song.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data()!;
+    return Song(
+      id: doc.id, // usa el id del documento como id único
+      title: data['title'] ?? '',
+      singer: data['singer'] ?? '',
+      year: data['year'] ?? 0,
+      posterUrl: data['posterUrl'],
+      lyric: data['lyric'],
+    );
+  }
+
   Map<String, dynamic> toFirestore() {
     return {
-      'id': id,
       'title': title,
-      'director': singer,
+      'singer': singer,
       'year': year,
       'posterUrl': posterUrl,
-      'lyrics': lyric,
+      'lyric': lyric,
     };
   }
 }
