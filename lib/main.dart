@@ -49,7 +49,7 @@ class EstadoPaginaDeInicio extends ConsumerState<PaginaDeInicio> {
   @override
   void initState() {
     super.initState();
-    // ✅ cuando arranca la app, traigo todos los usuarios de Firebase
+    //cuando arranca la app, traigo todos los usuarios de Firebase
     Future.microtask(() {
       ref.read(usersProvider.notifier).getAllUsers();
     });
