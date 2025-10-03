@@ -13,7 +13,7 @@ class SongsNotifier extends StateNotifier<List<Song>> {
   final FirebaseFirestore db;
   SongsNotifier(this.db) : super([]);
 
-  // 🔹 Agregar canción
+  // AGREGA CANCION
   Future<void> addSong(Song song) async {
     final doc = db.collection('songs').doc();
     final newSong = Song(
@@ -32,7 +32,7 @@ class SongsNotifier extends StateNotifier<List<Song>> {
     }
   }
 
-  // 🔹 Traer todas las canciones
+  // TRAE TODAS LAS CANCIONES
   Future<void> getAllSongs() async {
     try {
       final snapshot = await db.collection('songs').get();
@@ -42,7 +42,7 @@ class SongsNotifier extends StateNotifier<List<Song>> {
     }
   }
 
-  // 🔹 Editar canción
+  // EDITAR CANCION
   Future<void> updateSong(Song song) async {
     try {
       await db.collection('songs').doc(song.id).update(song.toFirestore());
@@ -52,7 +52,7 @@ class SongsNotifier extends StateNotifier<List<Song>> {
     }
   }
 
-  // 🔹 Borrar canción
+  // BORRRAR CANCION
   Future<void> deleteSong(String id) async {
     try {
       await db.collection('songs').doc(id).delete();
