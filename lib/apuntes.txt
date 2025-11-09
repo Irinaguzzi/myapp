@@ -115,7 +115,7 @@ Con las sql, las tablas de "informacion" estan estructuradas, todos tienen las m
 
 sincrónico --> sé cuando algo va a pasar.
 asinc --> asincrónico (no sé cuando va a pasar, tengo que esperar)
-await --> el programa se frena y espera. Se pone a awaitear tareas asincrónicas, frenando todo el programa.
+await --> el programa se fre7na y espera. Se pone a awaitear tareas asincrónicas, frenando todo el programa.
 
 adbr repo (el que nos mostro el del campus): movieapp trabajo con firebas, pero future examples que trabaja solo con promesas sin firebase
 
@@ -132,4 +132,8 @@ final movies = await docs.get(); //es una funcion que espera a que termona de tr
 una promesa ejecuta una funcion que no sabes cuanto tarda, el codigo no sigue si la pormesa no se cumple:
 future<void> addMovie(Movie movie) async{
  /////
+pantalla de mi perfil: cuando te logueaste y entraste a la pagina tenes que tener la opcion de Mi perfil donde accedés y ves
+toda tu información.
+ademas debes tener una forma de ver tus favoritos,s ea con el corazon y una pagina donde tenes solamente tus favoritos
+que cada usuario tenga sus favoritos distintos.
 }

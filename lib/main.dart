@@ -27,10 +27,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: router,
-      title: 'mi app de canciones',
-      debugShowCheckedModeBanner: false,
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context,snapshot){
+        /// el snapshot.data es lo del user autenticado
+        final estaLogueado = snapshot.data != null;
+
+        return MaterialApp.router(
+          routerConfig: router(estaLogueado)
+          title: 'mi app de canciones',
+          debugShowCheckedModeBanner: false,
+        );
+      }
     );
   }
 }
