@@ -1,98 +1,71 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/core/router/router.dart'; // lista de usuarios
-import 'package:go_router/go_router.dart'; // navegación
-import 'package:firebase_core/firebase_core.dart';
-import 'package:myapp/presentation/providers.dart';
-import 'firebase_options.dart';
+import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> main() async {
-  // inicializo Firebase
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Inicializa Firebase usando las opciones generadas por flutterfire configure
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context,snapshot){
-        /// el snapshot.data es lo del user autenticado
-        final estaLogueado = snapshot.data != null;
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-        return MaterialApp.router(
-          routerConfig: router(estaLogueado),
-          title: 'mi app de canciones',
-          debugShowCheckedModeBanner: false,
-        );
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  Future<void> iniciarSesion() async {
+    final email = emailController.text.trim();
+    final pass = passwordController.text.trim();
+
+    if (email.isEmpty || pass.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor completá email y contraseña')),
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      if (mounted) {
+        GoRouter.of(context).go('/lista');
       }
-    );
-  }
-}
-
-class PaginaDeInicio extends ConsumerStatefulWidget {
-  const PaginaDeInicio({super.key});
-
-  @override
-  EstadoPaginaDeInicio createState() => EstadoPaginaDeInicio();
-}
-
-class EstadoPaginaDeInicio extends ConsumerState<PaginaDeInicio> {
-  final controladorUsuario = TextEditingController();
-  final controladorContra = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    //cuando arranca la app, traigo todos los usuarios de Firebase
-    Future.microtask(() {
-      ref.read(usersProvider.notifier).getAllUsers();
-    });
-  }
-  void iniciarSesion() {
-  final usuario = controladorUsuario.text;
-  final contra = controladorContra.text;
-
-  if (usuario.isEmpty || contra.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          content: Text('por favor, completá el usuario y/o la contraseña')),
-    );
-    return;
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.message}")),
+      );
+    }
   }
 
-  // ahora lee la lista de usuarios desde Firebase
-  final usersList = ref.read(usersProvider);
-  bool userExists = usersList.any(
-    (u) => u.username == usuario && u.password == contra,
-  );
+  Future<void> registrarUsuario() async {
+    final email = emailController.text.trim();
+    final pass = passwordController.text.trim();
 
-    if (!userExists) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('usuario o contraseña incorrectos')),
-    );
-    } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('inicio de sesión exitoso')),
-    );
-    GoRouter.of(context).go('/lista');
-    } 
+    if (email.isEmpty || pass.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Completá email y contraseña')),
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Usuario registrado con éxito')),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.message}")),
+      );
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +86,14 @@ class EstadoPaginaDeInicio extends ConsumerState<PaginaDeInicio> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'iniciar sesión',
+                    'Iniciar sesión',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
+
                   Card(
                     color: Colors.grey[800],
                     shape: RoundedRectangleBorder(
@@ -127,17 +101,19 @@ class EstadoPaginaDeInicio extends ConsumerState<PaginaDeInicio> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: TextField(
-                        controller: controladorUsuario,
+                        controller: emailController,
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                          labelText: 'usuario',
+                          labelText: 'Email',
                           labelStyle: TextStyle(color: Colors.white70),
                           border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 12),
+
                   Card(
                     color: Colors.grey[800],
                     shape: RoundedRectangleBorder(
@@ -145,18 +121,20 @@ class EstadoPaginaDeInicio extends ConsumerState<PaginaDeInicio> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: TextField(
-                        controller: controladorContra,
+                        controller: passwordController,
                         obscureText: true,
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                          labelText: 'contraseña',
+                          labelText: 'Contraseña',
                           labelStyle: TextStyle(color: Colors.white70),
                           border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 20),
+
                   ElevatedButton(
                     onPressed: iniciarSesion,
                     style: ElevatedButton.styleFrom(
@@ -173,6 +151,16 @@ class EstadoPaginaDeInicio extends ConsumerState<PaginaDeInicio> {
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.2,
                           color: Colors.white),
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  TextButton(
+                    onPressed: registrarUsuario,
+                    child: const Text(
+                      'Crear cuenta',
+                      style: TextStyle(color: Colors.white70),
                     ),
                   ),
                 ],

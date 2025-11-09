@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/presentation/providers.dart'; // provider de canciones (Firebase)
-import 'package:myapp/domain/song_detail_args.dart'; 
-import 'package:myapp/screens/song_detail.dart'; 
+import 'package:myapp/presentation/providers.dart';
+import 'package:myapp/domain/song_detail_args.dart';
+import 'package:myapp/screens/song_detail.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ListaSongs extends ConsumerStatefulWidget {
   const ListaSongs({super.key});
@@ -16,7 +17,6 @@ class _ListaSongsState extends ConsumerState<ListaSongs> {
   @override
   void initState() {
     super.initState();
-    // 🔹 Al entrar, traer canciones desde Firebase
     Future.microtask(() {
       ref.read(songsProvider.notifier).getAllSongs();
     });
@@ -26,7 +26,6 @@ class _ListaSongsState extends ConsumerState<ListaSongs> {
   Widget build(BuildContext context) {
     final songsList = ref.watch(songsProvider);
 
-    // divido en dos columnas
     final leftColumn = songsList.sublist(0, (songsList.length / 2).ceil());
     final rightColumn =
         songsList.sublist((songsList.length / 2).ceil(), songsList.length);
@@ -39,6 +38,22 @@ class _ListaSongsState extends ConsumerState<ListaSongs> {
     });
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("My Playlist"),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              if (mounted) {
+                GoRouter.of(context).go('/');
+              }
+            },
+          )
+        ],
+      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -50,17 +65,6 @@ class _ListaSongsState extends ConsumerState<ListaSongs> {
           SafeArea(
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    'My Playlist:',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: pairedSongs.length,
@@ -90,7 +94,6 @@ class _ListaSongsState extends ConsumerState<ListaSongs> {
                                           const EdgeInsets.symmetric(
                                               horizontal: 8),
                                       onTap: () {
-                                        // al tocar la canción voy a song detail en modo view
                                         GoRouter.of(context).push(
                                           '/song-detail',
                                           extra: SongDetailArgs(
@@ -143,7 +146,6 @@ class _ListaSongsState extends ConsumerState<ListaSongs> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Botón para agregar nueva canción
           GoRouter.of(context).push(
             '/song-detail',
             extra: SongDetailArgs(mode: SongDetailMode.add),
