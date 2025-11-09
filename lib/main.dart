@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // <-- agregá esto
 import 'package:firebase_core/firebase_core.dart';
 import 'package:myapp/core/router/router.dart';
-
-
-// Si tenés un archivo firebase_options.dart generado por FlutterFire CLI, importalo:
 import 'firebase_options.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
-  // Inicializar Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope( // <-- envolvés la app en ProviderScope
+      child: MyApp(),
+    ),
+  );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router, // GoRouter
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -38,6 +34,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-

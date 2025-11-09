@@ -6,6 +6,8 @@ import 'package:myapp/screens/register_page.dart';
 import 'package:myapp/screens/profile_page.dart';
 import 'package:myapp/screens/liked_songs.dart';
 import 'package:myapp/screens/lista_songs.dart';
+import 'package:myapp/screens/song_detail.dart';        // 👈 agregado
+import 'package:myapp/domain/song_detail_args.dart';     // 👈 agregado
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
@@ -47,6 +49,18 @@ final GoRouter router = GoRouter(
       path: '/likes',
       builder: (BuildContext context, GoRouterState state) {
         return const LikedSongsPage();
+      },
+    ),
+
+    // SONG DETAIL 👇 (mismo formato, solo que usa los args)
+    GoRoute(
+      path: '/song-detail',
+      builder: (BuildContext context, GoRouterState state) {
+        final args = state.extra as SongDetailArgs;
+        return SongDetailScreen(
+          song: args.song,
+          mode: args.mode,
+        );
       },
     ),
   ],
