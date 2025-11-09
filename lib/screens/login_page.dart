@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,10 +26,19 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: pass,
-      );
+      final cred = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: pass);
+
+      // Asegurarse que exista documento de perfil en Firestore
+      final uid = cred.user!.uid;
+      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+      final doc = await docRef.get();
+      if (!doc.exists) {
+        await docRef.set({
+          'email': email,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
 
       if (mounted) {
         GoRouter.of(context).go('/lista');
@@ -52,14 +62,23 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: pass,
-      );
+      final cred = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: pass);
+
+      // Crear documento de usuario en Firestore
+      final uid = cred.user!.uid;
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'email': email,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Usuario registrado con éxito')),
       );
+
+      if (mounted) {
+        GoRouter.of(context).go('/lista');
+      }
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: ${e.message}")),

@@ -132,8 +132,7 @@ final movies = await docs.get(); //es una funcion que espera a que termona de tr
 una promesa ejecuta una funcion que no sabes cuanto tarda, el codigo no sigue si la pormesa no se cumple:
 future<void> addMovie(Movie movie) async{
  /////
-pantalla de mi perfil: cuando te logueaste y entraste a la pagina tenes que tener la opcion de Mi perfil donde accedés y ves
-toda tu información.
-ademas debes tener una forma de ver tus favoritos,s ea con el corazon y una pagina donde tenes solamente tus favoritos
-que cada usuario tenga sus favoritos distintos.
+pantalla de mi perfil: cuando te logueaste y entraste a la pagina tenes que tener la opcion de Mi perfil donde accedés y ves el titulo de la pantalla es "Tu usuario" y que aparezca: Nombre de usuario: y Contraseña: y que tenga la opcion de verse o no verse, como en la pagina del loguin
+ademas debes tener una forma poner like a una cancion y de ver tus favoritos, sea con el corazon y una pagina donde tenes solamente tus favoritos
+que cada usuario tenga sus favoritos distintos a modo de que si yo me logueo con usuario1 veo los likes de usuario 1 y si me logueo con usuario2 solo veo los likes de usuario2
 }

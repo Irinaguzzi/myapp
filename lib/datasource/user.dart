@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class LocalUser {
   final String id;
   final String username;
   final String password;
 
-  User({required this.id, required this.username, required this.password});
+  LocalUser({required this.id, required this.username, required this.password});
 
-  factory User.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
+  factory LocalUser.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
-    return User(
+    return LocalUser(
       id: doc.id,
       username: data['username'] ?? '',
       password: data['password'] ?? '',

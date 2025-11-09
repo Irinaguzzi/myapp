@@ -42,6 +42,9 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
     final isEdit = widget.mode == SongDetailMode.edit;
     final isAdd = widget.mode == SongDetailMode.add;
 
+    final likedSet = ref.watch(likesProvider);
+    final isLiked = widget.song != null && likedSet.contains(widget.song!.id);
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -59,12 +62,19 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
         actions: [
           if (isView)
             IconButton(
+              icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
+              onPressed: () {
+                if (widget.song == null) return;
+                ref.read(likesProvider.notifier).toggleLike(widget.song!.id);
+              },
+            ),
+          if (isView)
+            IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
                 GoRouter.of(context).pushReplacement(
                   '/song-detail',
-                  extra: SongDetailArgs(
-                      song: widget.song, mode: SongDetailMode.edit),
+                  extra: SongDetailArgs(song: widget.song, mode: SongDetailMode.edit),
                 );
               },
             ),
