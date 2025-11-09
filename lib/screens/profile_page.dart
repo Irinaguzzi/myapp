@@ -3,17 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+
 class _ProfilePageState extends State<ProfilePage> {
   final usernameController = TextEditingController();
   String email = "";
   bool loading = false;
+
 
   @override
   void initState() {
@@ -21,29 +25,37 @@ class _ProfilePageState extends State<ProfilePage> {
     _cargarDatos();
   }
 
+
   Future<void> _cargarDatos() async {
     final user = fb_auth.FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
+
     // email viene del Auth
     email = user.email ?? '';
+
 
     // username viene de Firestore
     final ref = FirebaseFirestore.instance.collection('users').doc(user.uid);
     final doc = await ref.get();
 
+
     if (doc.exists) {
       usernameController.text = doc.data()?['username'] ?? '';
     }
 
+
     setState(() {});
   }
+
 
   Future<void> _guardarUsername() async {
     final user = fb_auth.FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
+
     final nuevoUsername = usernameController.text.trim();
+
 
     if (nuevoUsername.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -52,7 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
       return;
     }
 
+
     setState(() => loading = true);
+
 
     try {
       await FirebaseFirestore.instance
@@ -61,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
           .set({
         'username': nuevoUsername
       }, SetOptions(merge: true));
+
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Username actualizado")),
@@ -74,10 +89,12 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+
   Future<void> _cerrarSesion() async {
     await fb_auth.FirebaseAuth.instance.signOut();
     if (mounted) GoRouter.of(context).go('/');
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +123,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
+
             const SizedBox(height: 20),
+
 
             // USERNAME editable
             Card(
@@ -128,7 +147,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
+
             const SizedBox(height: 20),
+
 
             // BOTON GUARDAR
             ElevatedButton(
@@ -141,7 +162,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   : const Text("Guardar"),
             ),
 
+
             const SizedBox(height: 20),
+
 
             // CERRAR SESIÓN
             OutlinedButton(

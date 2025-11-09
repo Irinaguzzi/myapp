@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:myapp/screens/login_page.dart';
@@ -5,37 +6,48 @@ import 'package:myapp/screens/register_page.dart';
 import 'package:myapp/screens/profile_page.dart';
 import 'package:myapp/screens/liked_songs.dart';
 import 'package:myapp/screens/lista_songs.dart';
-final router = GoRouter(
+
+final GoRouter router = GoRouter(
   initialLocation: '/',
   routes: [
     // LOGIN
     GoRoute(
       path: '/',
-      builder: (context, state) => const LoginPage(),
+      builder: (BuildContext context, GoRouterState state) {
+        return const LoginPage();
+      },
     ),
 
     // REGISTER
     GoRoute(
       path: '/register',
-      builder: (context, state) => const RegisterPage(),
+      builder: (BuildContext context, GoRouterState state) {
+        return const RegisterPage();
+      },
     ),
 
-    // HOME / LISTA DE CANCIONES
+    // LISTA DE CANCIONES
     GoRoute(
       path: '/lista',
-      builder: (context, state) => const ListaSongs(),
+      builder: (BuildContext context, GoRouterState state) {
+        return const ListaSongs();
+      },
     ),
 
     // PROFILE
     GoRoute(
       path: '/profile',
-      builder: (context, state) => const ProfilePage(),
+      builder: (BuildContext context, GoRouterState state) {
+        return const ProfilePage();
+      },
     ),
 
     // LIKES
     GoRoute(
       path: '/likes',
-      builder: (context, state) => const LikedSongsPage(), // si aún no la tenés, comentala
+      builder: (BuildContext context, GoRouterState state) {
+        return const LikedSongsPage();
+      },
     ),
   ],
 );

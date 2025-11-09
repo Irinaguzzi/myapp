@@ -3,24 +3,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
+
 
 class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
 
+
   bool loading = false;
+
 
   Future<void> registrar() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
     final username = usernameController.text.trim();
+
 
     if (email.isEmpty || password.isEmpty || username.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -29,14 +35,18 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+
     setState(() => loading = true);
+
 
     try {
       // Crear usuario en FirebaseAuth
-      final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final cred = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+
 
       // Guardar username en Firestore bajo el UID
       await FirebaseFirestore.instance
@@ -47,11 +57,14 @@ class _RegisterPageState extends State<RegisterPage> {
         'username': username,
       });
 
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Cuenta creada con éxito")),
         );
 
+
+        // Ir a la página principal de la app
         GoRouter.of(context).go('/lista');
       }
     } on FirebaseAuthException catch (e) {
@@ -62,6 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() => loading = false);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            // EMAIL
             TextField(
               controller: emailController,
               style: const TextStyle(color: Colors.white),
@@ -83,7 +98,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 labelStyle: TextStyle(color: Colors.white70),
               ),
             ),
+
+
             const SizedBox(height: 12),
+
+
+            // USERNAME (editable)
             TextField(
               controller: usernameController,
               style: const TextStyle(color: Colors.white),
@@ -92,7 +112,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 labelStyle: TextStyle(color: Colors.white70),
               ),
             ),
+
+
             const SizedBox(height: 12),
+
+
+            // PASSWORD
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -102,7 +127,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 labelStyle: TextStyle(color: Colors.white70),
               ),
             ),
+
+
             const SizedBox(height: 20),
+
+
             ElevatedButton(
               onPressed: loading ? null : registrar,
               style: ElevatedButton.styleFrom(

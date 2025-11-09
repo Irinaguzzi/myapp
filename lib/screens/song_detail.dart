@@ -5,17 +5,22 @@ import 'package:myapp/domain/class.dart';
 import 'package:myapp/presentation/providers.dart';
 import 'package:myapp/domain/song_detail_args.dart';
 
+
 enum SongDetailMode { view, add, edit }
+
 
 class SongDetailScreen extends ConsumerStatefulWidget {
   final Song? song;
   final SongDetailMode mode;
 
+
   const SongDetailScreen({super.key, this.song, required this.mode});
+
 
   @override
   ConsumerState<SongDetailScreen> createState() => _SongDetailScreenState();
 }
+
 
 class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
   late TextEditingController titleController;
@@ -23,6 +28,7 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
   late TextEditingController yearController;
   late TextEditingController posterUrlController;
   late TextEditingController lyricsController;
+
 
   @override
   void initState() {
@@ -36,14 +42,17 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
     lyricsController = TextEditingController(text: widget.song?.lyric ?? '');
   }
 
+
   @override
   Widget build(BuildContext context) {
     final isView = widget.mode == SongDetailMode.view;
     final isEdit = widget.mode == SongDetailMode.edit;
     final isAdd = widget.mode == SongDetailMode.add;
 
+
     final likedSet = ref.watch(likesProvider);
     final isLiked = widget.song != null && likedSet.contains(widget.song!.id);
+
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -127,11 +136,13 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
                             : null,
                       );
 
+
                       if (isAdd) {
                         ref.read(songsProvider.notifier).addSong(newSong);
                       } else if (isEdit) {
                         ref.read(songsProvider.notifier).updateSong(newSong);
                       }
+
 
                       GoRouter.of(context).pop();
                     },
@@ -152,6 +163,7 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
       ),
     );
   }
+
 
   Widget cardCampo(
     TextEditingController controller,
@@ -180,3 +192,5 @@ class _SongDetailScreenState extends ConsumerState<SongDetailScreen> {
     );
   }
 }
+
+

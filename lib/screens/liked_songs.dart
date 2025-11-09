@@ -5,15 +5,19 @@ import 'package:myapp/domain/song_detail_args.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/screens/song_detail.dart';
 
+
 class LikedSongsPage extends ConsumerWidget {
   const LikedSongsPage({super.key});
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final songs = ref.watch(songsProvider);
     final likes = ref.watch(likesProvider);
 
+
     final likedSongs = songs.where((s) => likes.contains(s.id)).toList();
+
 
     return Scaffold(
       appBar: AppBar(

@@ -3,17 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+
 import 'package:myapp/presentation/providers.dart';
 import 'package:myapp/domain/song_detail_args.dart';
 import 'package:myapp/screens/song_detail.dart';
 
+
 class ListaSongs extends ConsumerWidget {
   const ListaSongs({super.key});
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final songs = ref.watch(songsProvider);
     final likes = ref.watch(likesProvider);
+
 
     return Scaffold(
       appBar: AppBar(
@@ -45,6 +49,7 @@ class ListaSongs extends ConsumerWidget {
         itemBuilder: (context, i) {
           final song = songs[i];
           final isLiked = likes.contains(song.id);
+
 
           return Card(
             color: Colors.grey[900],

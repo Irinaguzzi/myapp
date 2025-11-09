@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,76 +13,76 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool loading = false;
 
-  Future<void> iniciarSesion() async {
+  Future<void> login() async {
     final email = emailController.text.trim();
-    final pass = passwordController.text.trim();
+    final password = passwordController.text.trim();
 
-    if (email.isEmpty || pass.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor completá email y contraseña')),
+        const SnackBar(content: Text("Complete todos los campos")),
       );
       return;
     }
 
-    try {
-      final cred = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: pass);
+    setState(() => loading = true);
 
-      // Asegurarse que exista documento de perfil en Firestore
-      final uid = cred.user!.uid;
-      final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
-      final doc = await docRef.get();
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
       if (!doc.exists) {
-        await docRef.set({
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
           'email': email,
-          'createdAt': FieldValue.serverTimestamp(),
+          'username': '',
         });
       }
 
-      if (mounted) {
-        GoRouter.of(context).go('/lista');
-      }
+      if (context.mounted) GoRouter.of(context).go('/lista');
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.message}")),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error: ${e.message}")));
+    } finally {
+      setState(() => loading = false);
     }
   }
 
   Future<void> registrarUsuario() async {
     final email = emailController.text.trim();
-    final pass = passwordController.text.trim();
+    final password = passwordController.text.trim();
 
-    if (email.isEmpty || pass.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Completá email y contraseña')),
+        const SnackBar(content: Text("Complete todos los campos")),
       );
       return;
     }
 
     try {
       final cred = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: pass);
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-      // Crear documento de usuario en Firestore
       final uid = cred.user!.uid;
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         'email': email,
-        'createdAt': FieldValue.serverTimestamp(),
+        'username': '',
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuario registrado con éxito')),
+        const SnackBar(content: Text("Usuario registrado con éxito")),
       );
 
-      if (mounted) {
-        GoRouter.of(context).go('/lista');
-      }
+      if (context.mounted) GoRouter.of(context).go('/lista');
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.message}")),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error: ${e.message}")));
     }
   }
 
@@ -155,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
 
                   ElevatedButton(
-                    onPressed: iniciarSesion,
+                    onPressed: loading ? null : login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurpleAccent,
                       padding: const EdgeInsets.symmetric(
@@ -163,14 +163,21 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Text(
-                      'INGRESAR',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                          color: Colors.white),
-                    ),
+                    child: loading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                color: Colors.white, strokeWidth: 2),
+                          )
+                        : const Text(
+                            'INGRESAR',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                                color: Colors.white),
+                          ),
                   ),
 
                   const SizedBox(height: 12),

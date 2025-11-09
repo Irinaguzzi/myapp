@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class Song {
   final String id;
   final String title;
@@ -7,6 +8,7 @@ class Song {
   final int year;
   final String? posterUrl;
   final String? lyric;
+
 
   Song({
     required this.id,
@@ -16,6 +18,7 @@ class Song {
     this.posterUrl,
     this.lyric,
   });
+
 
   factory Song.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
@@ -28,6 +31,7 @@ class Song {
       lyric: data['lyric'],
     );
   }
+
 
   Map<String, dynamic> toFirestore() {
     return {
