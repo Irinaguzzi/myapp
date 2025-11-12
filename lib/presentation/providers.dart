@@ -1,15 +1,9 @@
 import 'dart:async';
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-
-// alias para evitar conflicto con LocalUser
+// alias para evitar q se confunda con LocalUser
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
-
-
-import 'package:myapp/datasource/local_user.dart';  // <-- el modelo corregido
+import 'package:myapp/datasource/local_user.dart';  
 import 'package:myapp/domain/class.dart';
 
 
@@ -31,9 +25,8 @@ class SongsNotifier extends StateNotifier<List<Song>> {
 
 
   SongsNotifier(this.db) : super([]) {
-    // escuchar cambios de autenticación para (re)configurar la suscripción a canciones
+    // escuchar cambios de autenticación para (re)configurar la suscripcion a canciones
     _authSub = fb_auth.FirebaseAuth.instance.authStateChanges().listen((fb_auth.User? user) {
-      // cancelar la subscripción anterior
       _songsSub?.cancel();
 
 
@@ -55,8 +48,6 @@ class SongsNotifier extends StateNotifier<List<Song>> {
     });
   }
 
-
-  // obtiene una sola vez (opcional), útil si querés forzar recarga manual
   Future<void> getAllSongsOnce() async {
     final user = fb_auth.FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -91,9 +82,9 @@ class SongsNotifier extends StateNotifier<List<Song>> {
       await docRef.set({
         ...newSong.toFirestore(),
         'createdAt': FieldValue.serverTimestamp(),
-        'createdBy': user.uid, // por si querés migrar o auditar
+        'createdBy': user.uid, 
       });
-      // el listener de snapshots actualizará `state` automáticamente
+      // el listener de snapshots va a actualizar "state" automáticamente
     } catch (e) {
       print("Error al agregar canción en user collection: $e");
     }
@@ -110,7 +101,7 @@ class SongsNotifier extends StateNotifier<List<Song>> {
         ...song.toFirestore(),
         'updatedAt': FieldValue.serverTimestamp(),
       });
-      // listener actualizará el estado
+      // listener va a actualizar el estado
     } catch (e) {
       print("Error al actualizar canción: $e");
     }
@@ -122,14 +113,14 @@ class SongsNotifier extends StateNotifier<List<Song>> {
     if (user == null) throw Exception("Usuario no autenticado");
     try {
       await db.collection('users').doc(user.uid).collection('songs').doc(id).delete();
-      // listener actualizará el estado
+      // listener va a actualizar el estado
     } catch (e) {
       print("Error al borrar canción: $e");
     }
   }
 
 
-  // ---------------- Migration helper ----------------
+  // ---------------- Migration ----------------
   // Mueve canciones de la colección global 'songs' a users/{uid}/songs
   // Si los documentos en 'songs' tienen un campo 'createdBy' con UID, las moverá
   // Si no lo tienen, las ignorará (para evitar reasignar sin criterio)
@@ -148,8 +139,6 @@ class SongsNotifier extends StateNotifier<List<Song>> {
           // opcional: borrar original
           await doc.reference.delete();
         } else if (moveIfNoOwner) {
-          // si querés mover TODO aun sin owner, tendrás que decidir a qué uid asignarlas.
-          // Aquí solo se mueve a una carpeta 'orphan' global (no recomendado sin criterio)
           final targetRef = db.collection('users').doc('orphan').collection('songs').doc(doc.id);
           await targetRef.set({...data, 'migratedAt': FieldValue.serverTimestamp()});
           await doc.reference.delete();
@@ -224,9 +213,6 @@ class UsersNotifier extends StateNotifier<List<LocalUser>> {
     }
   }
 }
-
-
-
 
 
 

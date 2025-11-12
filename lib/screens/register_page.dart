@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
         );
 
 
-        // Ir a la página principal de la app
+        // Ir a la pagina ppl de la app
         GoRouter.of(context).go('/lista');
       }
     } on FirebaseAuthException catch (e) {
@@ -103,7 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(height: 12),
 
 
-            // USERNAME (editable)
+            // USERNAME editable<
             TextField(
               controller: usernameController,
               style: const TextStyle(color: Colors.white),
@@ -117,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(height: 12),
 
 
-            // PASSWORD
+            // CONTRA
             TextField(
               controller: passwordController,
               obscureText: true,

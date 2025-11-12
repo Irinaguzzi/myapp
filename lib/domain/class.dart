@@ -23,7 +23,7 @@ class Song {
   factory Song.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
     return Song(
-      id: doc.id, // usa el id del documento como id único
+      id: doc.id, // usa el id del documento como id unico
       title: data['title'] ?? '',
       singer: data['singer'] ?? '',
       year: data['year'] ?? 0,

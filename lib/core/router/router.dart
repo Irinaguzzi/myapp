@@ -6,8 +6,8 @@ import 'package:myapp/screens/register_page.dart';
 import 'package:myapp/screens/profile_page.dart';
 import 'package:myapp/screens/liked_songs.dart';
 import 'package:myapp/screens/lista_songs.dart';
-import 'package:myapp/screens/song_detail.dart';        // 👈 agregado
-import 'package:myapp/domain/song_detail_args.dart';     // 👈 agregado
+import 'package:myapp/screens/song_detail.dart';       
+import 'package:myapp/domain/song_detail_args.dart';     
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
